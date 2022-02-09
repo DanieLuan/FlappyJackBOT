@@ -1,1 +1,5 @@
 # FlappyJackBOT
+
+---
+
+⚠️ EM DESENVOLVIMENTO ⚠️
