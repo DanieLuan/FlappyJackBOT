@@ -63,7 +63,7 @@ int main() {
     if(stage==0){
       findSpot(h, w, mat_map, range, myIdNum, bots, profXpos, profYpos);
       stage++;
-
+			
     }
     if(stage ==1){
       if(pathMaker(profXpos, profYpos, myIdNum, bots) == 1){

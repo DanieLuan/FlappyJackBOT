@@ -24,6 +24,8 @@ int main() {
   int *profXpos , *profYpos;		//Posições de pesca, X e Y
   int stage = 0;		//Estágio de funcionamento do bot
 	bot_info* bots; //Registro para armazenar: X de um bot, Y de um bot, ID de um bot
+	int *portX;
+	int *portY;
 	
 	// === INÍCIO DA PARTIDA ===
 	//Alocações dinamicamente
@@ -42,7 +44,7 @@ int main() {
 
     readMap(h, w, mat_map); //Leitura do mapa
     scanf(" BOTS %i", &numBots); // Entrada da quantidade de bots existem na partida
-
+		
 		fprintf(stderr, "Existem %d bots na partida\n", numBots); //DEBUG APAGAR DEPOIS
 		//Alocação Dinâmica que ocorre em cada repetição
 
@@ -61,29 +63,26 @@ int main() {
       if(pathMaker(profXpos, profYpos, myIdNum, bots) == 1){
         stage++;
       }
-      if(stage ==1){
+      if(stage == 1){
         scanf("%s", line);  
       }
        fprintf(stderr, "estagio %d\n",stage); //DEBUG APAGAR DEPOIS
     }
-    if (stage ==2){
-      if(fishingAction(profXpos, profYpos, mat_map, weight) == 1 ){     
+    if(stage ==2){
+      if(fishingAction(profXpos, profYpos, mat_map, weight) == 1 ){
         fprintf(stderr, "A PESCA FOI CONCLUIDA \n"); //DEBUG APAGAR DEPOIS
         stage++;
       }
-
       if(stage ==2){
         scanf("%s", line);
       }
-
     }
-     if (stage ==3){
-       fprintf(stderr, "ESTAGIO 3 NAO FOI FEITO O BOT NAO VAI ENVIAR NADA RESULTARAM EM ERRO \n");
-
+    if(stage ==3){
+			if(findPort())
+      fprintf(stderr, "ESTAGIO 3 NAO FOI FEITO O BOT NAO VAI ENVIAR NADA RESULTARAM EM ERRO \n"); //DEBUG APAGAR DEPOIS
       if(stage ==3){
         scanf("%s", line);
       }
-
     }
 /*--------------ESTAGIOS DO BOT CLICICO------------------*/
 /*--------------ESTAGIOS DO BOT CLICICO------------------*/

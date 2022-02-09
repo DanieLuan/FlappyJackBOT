@@ -52,12 +52,12 @@ int IdentifyMe(char thisBotID[MAX_STR],int numbots, bot_info* bots){
 
 
 /*--------------FUNÇÃO PARA ACHAR O LOCAL DE PESCA MAIS LUCRATIVO --------------*/
-void findSpot(int h, int w, int** map_mat, int range, int myIdNumerical, bot_info* bots,int* profitX,int* profitY){
+void findSpot(int h, int w, int** map_mat, int range, int myIdNumerical, bot_info* bots, int* profitX, int* profitY){
   int profit = 0;
   //Algorithm to define Fihsing Spot
   	for (int i = 0; i < h; i++) {   
       for (int j = 0; j < w; j++) {
-        if((bots[myIdNumerical].X - range <= j && bots[myIdNumerical].X + range >= j) && (bots[myIdNumerical].Y - range <= i && bots[myIdNumerical].Y + range >= i)){//ERRO
+        if((bots[myIdNumerical].X - range <= j && bots[myIdNumerical].X + range >= j) && (bots[myIdNumerical].Y - range <= i && bots[myIdNumerical].Y + range >= i)){
             if (map_mat[i][j] >= 10){ //Posição que tem peixe
             int thisProfit =0;
             int d =0;
@@ -152,7 +152,6 @@ int fishingAction(int* profXpos, int* profYpos, int** mat_map, int* weight){
   fprintf(stderr, "%dx %dy \n", *profXpos, *profYpos);
   fprintf(stderr, "%d\n",mat_map[*profYpos][*profXpos]);
 
-
   if((mat_map[*profYpos][*profXpos] > 11) && (mat_map[*profYpos][*profXpos]  <= 19)){
     //fprintf(stderr, "Pescou Robalo, carga de %dKg \n",*weight);
     printf("FISH\n");
@@ -174,6 +173,39 @@ int fishingAction(int* profXpos, int* profYpos, int** mat_map, int* weight){
 
   return 1;
 }
+
+void findPort(int h, int w, int** map_mat, int myIdNumerical, bot_info* bots, int* portX, int* portY){
+  //Algorithm to define Fihsing Spot
+  int thisPortX =0;
+  int thisPortY =0;
+  for (int i = 0; i < h; i++){   
+    for (int j = 0; j < w; j++){
+      if (map_mat[i][j] == 1){//one is a PORT
+        thisPortX = j;
+        thisPortY = i;
+
+        bots[myIdNumerical].X + thisPortX
+
+
+        *portX = j;
+        *portY = i;
+
+
+
+      }
+    }
+  }
+  fprintf(stderr, "o Porto mais proximo é em %dx %dy para o %dº bot\n", *portX, *portY, (myIdNumerical + 1));
+}
+
+
+
+
+
+
+
+
+
 
 /*-----------------------------------------
 -----------------FUNCS ALOC----------------
