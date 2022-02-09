@@ -184,7 +184,11 @@ void findPort(int h, int w, int** map_mat, int myIdNumerical, bot_info* bots, in
         thisPortX = j;
         thisPortY = i;
 
-        bots[myIdNumerical].X + thisPortX
+        if((bots[myIdNumerical].X + thisPortX >)   ){
+
+
+
+        }
 
 
         *portX = j;
