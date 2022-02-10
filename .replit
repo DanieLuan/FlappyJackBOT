@@ -1,2 +1,2 @@
 language = "nodejs"
-run = "node ocma -mr 20 bot_A bot_B"
+run = "node ocma -m -mr 500 bot_A bot_B"
