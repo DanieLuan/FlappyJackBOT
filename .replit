@@ -1,2 +1,0 @@
-language = "nodejs"
-run = "node ocma -m -mr 500 bot_A bot_B"
