@@ -15,11 +15,9 @@ int main() {
 	setbuf(stdout, NULL);   // assim, nada é "guardado temporariamente"
 	setbuf(stderr, NULL);
 
-
 	/*------------------------ENTRADA DE DADOS DA PARTIDA---------------------*/
 	scanf("AREA %i %i", &h, &w);  //altura (h) x largura (w)
 	scanf(" ID %s", myId);  // ...e o id do bot
-	/*------------------------ENTRADA DE DADOS DA PARTIDA---------------------*/
 
 	/*------------------------PONTEIROS---------------------*/
 	int **mat_map;		//Mapa do jogo
@@ -33,12 +31,10 @@ int main() {
 
 	/*----------------------------Variáveis-------------------------*/
 	int action = 0; //1 - LEFT | 2 - RIGHT | 3 - UP | 4 - DOWN | 5 - FISH | 6 - SELL
-	int saldo = 0;    //Saldo total do bot
 	int range = (rand() % (5 - 4 + 1)) + 4;
 	int rangeStart = range;		//Área de busca de spots de pescado
 	int numBots =0;		//Quantidade de bots em jogo
 	int myIdNum;			//ID do bot no qual o programa roda (bot_A, bot_B, bot_C, ...)
-	int num = 0;//DEBUG!!! APAGAR DEPOIS
 	int UnStuck = 0;
 
 	/*----------------------------Alocações-------------------------*/
@@ -81,7 +77,6 @@ int main() {
 					range++;
 				}
 				*stage = 1;
-
 			}
 			if(*stage == 1){
 				if(bots[myIdNum].X == *profXpos && bots[myIdNum].Y == *profYpos){ //WARNING HERE
@@ -128,9 +123,8 @@ int main() {
 	scanf("%s", line); // RECEBE A RESPOSTA DA AÇÃO
 	action = 0; //Reseta a ação
 
-	if(0 == strcmp(line,"BUSY")){ //Caso bot receber BUSY, acionar o "desemtupimento"
-		UnStuck++;
-	}
+	if(0 == strcmp(line,"BUSY")) //Caso bot receber BUSY, acionar o "desemtupimento"
+		UnStuck = 1;
 
 	}
 	//================================FIM DA PARTIDA===============================//
