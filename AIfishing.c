@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 #include "definitions.h"
 #include "AIfishing.h"
 
@@ -9,210 +10,226 @@
 /*--------------FUNÇÃO PARA LER O MAPA------------------*/
 void readMap(int h, int w, int** mat_map){
   char id[10][MAX_STR];
-  //int map_mat[h][w], n, x[50], y[50];
-  
-  // Read SeaMap
-  for (int i = 0; i < h; i++) {
-    for (int j = 0; j < w; j++) {
-      scanf("%i", &mat_map[i][j]);
-    }
+
+  for (int i = 0; i < h; i++){
+	for (int j = 0; j < w; j++){
+		scanf("%i", &mat_map[i][j]);
+	}
   }
 }
 
-
-/*--------------FUNÇÃO PARA LER OS DADOS DOS BOTS------------------*/
+/*------------LER OS DADOS DE TODOS BOTS-----------*/
 void readBots(int numBots, bot_info* bots){
 	for (int i = 0; i < numBots; i++){
-      scanf("%s %i %i", bots[i].botID, &bots[i].Y, &bots[i].X);
-      fprintf(stderr, "%s Está nesta posição = %dx %dy \n",bots[i].botID, bots[i].X, bots[i].Y);
-    }
+		scanf("%s %i %i", bots[i].botID, &bots[i].Y, &bots[i].X);
+	}
 }
 
-
-
-
-
-/*--------------FUNÇÃO PARA IDENTIFICAR O NUMERO DO BOT-----------------*/
+/*----------IDENTIFICA O NUMERO DE CADA BOT-----------*/
 int IdentifyMe(char thisBotID[MAX_STR],int numbots, bot_info* bots){
-  //Identify ID relative to another IDs
   for (int i = 0; i < numbots; i++){
-    if(0 == strcmp(bots[i].botID, thisBotID)){
-			fprintf(stderr, "IdentifyID : %d\n", i);
-      return i;
-		}
+	if(0 == strcmp(bots[i].botID, thisBotID))
+		return i; //RETORNA O VALOR DO BOT EM RELAÇÃO À ORDEM "A, B, C, ..."
   }
 }
-
-
-
-
 
 /*--------------FUNÇÃO PARA ACHAR O LOCAL DE PESCA MAIS LUCRATIVO --------------*/
-void findSpot(int h, int w, int** map_mat, int range, int myIdNumerical, bot_info* bots, int* profitX, int* profitY){
-  int profit = 0;
-  //Algorithm to define Fihsing Spot
+int findSpot(int h, int w, int** map_mat, int range, int IDnum, bot_info* bots, int* profitX, int* profitY){
+
+	int profit1 = 0, profit2 = 0, profit3 = 0, profit4 = 0;
+
+	int profitX1 = 0, profitX2 = 0, profitX3 = 0, profitX4 = 0;
+	int profitY1 = 0, profitY2 = 0, profitY3 = 0, profitY4 = 0;
+
+  	int count;
+  	//Algorithm to define Fihsing Spot
   	for (int i = 0; i < h; i++) {   
-      for (int j = 0; j < w; j++) {
-        if((bots[myIdNumerical].X - range <= j && bots[myIdNumerical].X + range >= j) && (bots[myIdNumerical].Y - range <= i && bots[myIdNumerical].Y + range >= i)){
-            if (map_mat[i][j] >= 10){ //Posição que tem peixe
-						
-            int thisProfit =0;
-            int d =0;
-            d = map_mat[i][j]/10;
-						//Descobrir qual peixe tem na posição
+	  	for (int j = 0; j < w; j++) {
+			if((bots[IDnum].X - range <= j && bots[IDnum].X + range >= j) && (bots[IDnum].Y - range <= i && bots[IDnum].Y + range >= i)){
 
-            if (d==1)
-            	d = 100;
-            else if(d==2)
-            	d = 150;
-            else if(d==3)
-            	d = 200;
+				if(map_mat[i][j] >= 10 && map_mat[i][j]%10 > 1){ //Posição que tem peixe
+							
+				int thisProfit =0;
+				int d =0;
+				d = map_mat[i][j]/10;
+				//Descobrir qual peixe tem na posição
 
-						//Cálculo de valor da posição
-            thisProfit = (map_mat[i][j]%10)*d;
-            if (thisProfit > profit){
-            	profit = thisProfit;
-            	*profitX = j;
-            	*profitY = i;
-            }
-          }
-          else if (map_mat[i][j] == 1){
-          //one is a PORT
-          }
-      }
-    }
-  }
-}
+				if(d==1)
+					d = 100;
+				else if(d==2)
+					d = 150;
+				else if(d==3)
+					d = 200;
 
+				//Cálculo de valor da posição
+				thisProfit = (map_mat[i][j]%10)*d;
+				if(thisProfit > profit1){
 
+					profit4 = profit3;
+					profit3 = profit2;
+					profit2 = profit1;
+					profit1 = thisProfit;
+
+					profitY4 = profitY3;
+					profitX4 = profitX3;
+
+					profitY3 = profitY2;
+					profitX3 = profitX2;
+
+					profitY2 = profitY1;
+					profitX2 = profitX1;
+
+					profitY1 = i;
+					profitX1 = j;
+				}
+			}
+	 		}	
+		}
+	}
+  srand(time(NULL));
+
+  int r = rand() % 100;
+	
+	if (r >= 0 && r <= 40 && profit1 > 0){
+		*profitX = profitX1;
+		*profitY = profitY1;
+		return 0;
+	}
+		srand(time(NULL));
+	r = rand() % 100;
+		if(r >= 41 && r <= 70 && profit2 > 0){
+		*profitX = profitX2;
+		*profitY = profitY2;
+		return 0;
+	}
+		srand(time(NULL));
+	r = rand() % 100;
+	if(r >= 71 && r <= 90 && profit3 > 0){
+		*profitX = profitX3;
+		*profitY = profitY3;
+		return 0;
+	}
+		srand(time(NULL));
+		r = rand() % 100;
+	if(profit4 > 0){
+		*profitX = profitX4;
+		*profitY = profitY4;
+		return 0;
+	}
+	
+		return 404;
+	}
 
 
 /*--------------FUNÇÃO PARA DECIDIR O CAMINHO------------------*/
-int pathMaker(int* profXpos, int* profYpos, int myIdNumerical, bot_info* bots){
+int pathMaker(int* spotX, int* spotY, int myIdNumerical, bot_info* bots){
+	srand(*spotX + *spotY + bots[myIdNumerical].X + bots[myIdNumerical].Y);
+	int r = rand() % 2;
 
-  srand(*profXpos + *profYpos + bots[myIdNumerical].X + bots[myIdNumerical].Y);
-
-  int r = rand() % 2;
-	
-  if(r == 0){//ACHAR UMA FORMA MAIS INTELIGENTE DE USAR O RANDOOM PRA NAO TER QUE COPIAR E COLAR OS MESMO IF PRAS DUAS OCASIÕES
-    if(*profXpos > bots[myIdNumerical].X){
-	    printf("RIGHT\n");
-      fprintf(stderr, "AÇÃO: RIGHT\n");
-      return 0;
-    }
-    else if(*profXpos < bots[myIdNumerical].X){
-      printf("LEFT\n");
-      fprintf(stderr, "AÇÃO: LEFT\n");
-      return 0;
-    }
-    if(*profYpos > bots[myIdNumerical].Y){
-	    printf("DOWN\n");
-      fprintf(stderr, "AÇÃO: DOWN\n");
-      return 0;
-    }
-    else if(*profYpos < bots[myIdNumerical].Y){
-      printf("UP\n");
-      fprintf(stderr, "AÇÃO: UP\n");
-      return 0;
-    }
-  }
-  else{
-    if(*profYpos > bots[myIdNumerical].Y){
-	    printf("DOWN\n");
-      fprintf(stderr, "AÇÃO: DOWN\n");
-      return 0;
-    }
-    else if(*profYpos < bots[myIdNumerical].Y){
-      printf("UP\n");
-      fprintf(stderr, "AÇÃO: UP\n");
-      return 0;
-    }
-    if(*profXpos > bots[myIdNumerical].X){
-	    printf("RIGHT\n");
-      fprintf(stderr, "AÇÃO: RIGHT\n");
-      return 0;
-    }
-    else if(*profXpos < bots[myIdNumerical].X){
-      printf("LEFT\n");
-      fprintf(stderr, "AÇÃO: LEFT\n");
-      return 0;
-    }
-  }
-  return 1;
-}
-
+	if(r == 0){
+		if(*spotX > bots[myIdNumerical].X){
+		return 2; //RIGHT
+		}
+		else if(*spotX < bots[myIdNumerical].X){
+		return 1; //LEFT
+		}
+		if(*spotY > bots[myIdNumerical].Y){
+		return 4; //DOWN
+		}
+		else if(*spotY < bots[myIdNumerical].Y){
+		return 3; //UP
+		}
+	}
+	else{
+		if(*spotY > bots[myIdNumerical].Y){
+		return 4; //DOWN
+		}
+		else if(*spotY < bots[myIdNumerical].Y){
+		return 3; //UP
+		}
+		if(*spotX > bots[myIdNumerical].X){
+		return 2; //RIGHT
+		}
+		else if(*spotX < bots[myIdNumerical].X){
+		return 1; //LEFT
+		}
+	}
+	}
 
 /*----------------------------FUNÇÃO PARA PESCAR---------------------------*/
-int fishingAction(int* profXpos, int* profYpos, int** mat_map, int* weight, int* stage){
+int fishingAction(int* spotX, int* spotY, int** mat_map, int* weight, int* stage){
+	if((mat_map[*spotY][*spotX] > 11) && (mat_map[*spotY][*spotX]  <= 19) && (*weight <=9)  ){
+		*weight = *weight +1;
+		return 5; //FISH
+	}
 
+	else if((mat_map[*spotY][*spotX] > 21) && (mat_map[*spotY][*spotX]  <= 29) &&  (*weight <=9) ){
+		*weight = *weight +1;
+		return 5; //FISH
+	}
 
-  if((mat_map[*profYpos][*profXpos] > 11) && (mat_map[*profYpos][*profXpos]  <= 19) && (*weight <=10)  ){
-    *weight = *weight +1;
-    fprintf(stderr, "AÇÃO: Pescou Robalo\n");
-    printf("FISH\n");
-    if(*weight==10 || mat_map[*profYpos][*profXpos] == 12){
-      return 1;
-    }
-    return 0;
-  }
-  else if((mat_map[*profYpos][*profXpos] > 21) && (mat_map[*profYpos][*profXpos]  <= 29) &&  (*weight <=10) ){
-    *weight = *weight +1;
-    fprintf(stderr, "AÇÃO: Pescou Cioba\n");
-    printf("FISH\n");
-    if(*weight==10 || mat_map[*profYpos][*profXpos] == 22){
-      
-      return 1;
-    }
-    return 0;
-  }
-  else if((mat_map[*profYpos][*profXpos] > 31) && (mat_map[*profYpos][*profXpos]  <= 39) &&  (*weight  <=10) ){
-    *weight = *weight +1;
-    fprintf(stderr, "AÇÃO: Pescou Robalo\n");
-    printf("FISH\n");
-    if(*weight==10 || mat_map[*profYpos][*profXpos] == 32){
-      
-      return 1;
-    }
-    return 0;
-  }
-  printf("UP\n");
-  fprintf(stderr, "FUNCAO FICOU SEM FIM \n");
-  *stage = 0;
-  return 0;
-  
-  
-}
+	else if((mat_map[*spotY][*spotX] > 31) && (mat_map[*spotY][*spotX]  <= 39) &&  (*weight  <=9) ){
+		*weight = *weight +1;
+		return 5; //FISH
+	}
+	else if(*weight  ==10){
+		return 10; //NAO DEVE PESCAR. VOLTAR PORTO
+	}
+	else{
+		return 20; //NAO DEVE PESCAR. SPOT COM 1 PEIXE | CASO EXTREMO
+	}
+	}
+
 
 void findPort(int h, int w, int** map_mat, int myIdNumerical, bot_info* bots, int* portX, int* portY){
-  //Algorithm to define Fihsing Spot
-  int thisPortDist = 1000000;
-  int portDist = 10000000;
-	
-  for (int i = 0; i < h; i++){   
-    for (int j = 0; j < w; j++){
-      if (map_mat[i][j] == 1){//one is a PORT
+	//Algorithm to define Fihsing Spot
+	int thisPortDist = 10000;
+	int portDist = 10000;
+		
+	for (int i = 0; i < h; i++){   
+		for (int j = 0; j < w; j++){
+		if (map_mat[i][j] == 1){ //one is a PORT
+				int x1;
+				int y1;
 
-        thisPortDist =  abs((bots[myIdNumerical].X + bots[myIdNumerical].Y) - (j + i));
+				x1 = abs(bots[myIdNumerical].X - j);
+				y1 = abs(bots[myIdNumerical].Y - i);
 
-        if(thisPortDist <= portDist){
-          *portX = j;
-          *portY = i;
-          portDist = thisPortDist;
-        }     
-      }
-    }
-  }
-  //fprintf(stderr, "o Porto mais proximo é em %dx %dy para o %dº bot\n", *portX, *portY, (myIdNumerical + 1));
+				thisPortDist = sqrt((x1*x1) + (y1*y1));
+
+		if(thisPortDist <= portDist){
+			*portX = j;
+			*portY = i;
+			portDist = thisPortDist;
+			}     
+		} 
+		}
+	}
 }
 
-
-
-
-
-
-
-
-
+void doAction(int action){
+	if(action == 1){
+	printf("LEFT\n");
+	}
+	else if(action == 2){
+		printf("RIGHT\n");
+	}
+	else if(action == 3){
+		printf("UP\n");
+	}
+	else if(action == 4){
+		printf("DOWN\n");
+	}
+	else if(action == 5){
+		printf("FISH\n");
+	}
+	else if(action == 6){
+		printf("SELL\n");
+	}
+	else{
+		printf("SELL\n");
+	}
+}
 
 /*-----------------------------------------
 -----------------FUNCS ALOC----------------
