@@ -28,7 +28,6 @@ void readBots(int numBots, bot_info* bots){
     }
 }
 
-
 /*--------------FUNÇÃO PARA IDENTIFICAR O NUMERO DO BOT-----------------*/
 int IdentifyMe(char thisBotID[MAX_STR],int numbots, bot_info* bots){
   //Identify ID relative to another IDs
@@ -96,35 +95,34 @@ int findSpot(int h, int w, int** map_mat, int range, int IDnum, bot_info* bots, 
   	srand(time(NULL));
 	int r = rand() % 100;
 		
-	if (r >= 0 && r <= 40 && profit1 > 0){
+	if (r >= 0 && r <= 40 && profit1 > 800){
 		*profitX = profitX1;
 		*profitY = profitY1;
 		return 0;
 	}
 		srand(time(NULL));
 	r = rand() % 100;
-	if(r >= 41 && r <= 70 && profit2 > 0){
+	if(r >= 41 && r <= 70 && profit2 > 800){
 		*profitX = profitX2;
 		*profitY = profitY2;
 		return 0;
 	}
 		srand(time(NULL));
 	r = rand() % 100;
-	if(r >= 71 && r <= 90 && profit3 > 0){
+	if(r >= 71 && r <= 90 && profit3 > 800){
 		*profitX = profitX3;
 		*profitY = profitY3;
 		return 0;
 	}
 		srand(time(NULL));
 		r = rand() % 100;
-	if(profit4 > 0){
+	if(profit4 > 800){
 		*profitX = profitX4;
 		*profitY = profitY4;
 		return 0;
 	}
 	return 404;
 }
-
 
 /*--------------FUNÇÃO PARA DECIDIR O CAMINHO------------------*/
 int pathMaker(int* spotX, int* spotY, int myIdNumerical, bot_info* bots){
